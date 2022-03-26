@@ -18,7 +18,8 @@ func Update(wf *aw.Workflow) error {
 
 	// check if an update is available
 	if !wf.UpdateAvailable() {
-		wf.Feedback.NewItem("You're already on the latest release :)").
+		wf.Feedback.
+			NewItem("You're already on the latest release :)").
 			Subtitle(wf.Version()).
 			Icon(aw.IconWorkflow)
 		return nil
@@ -30,7 +31,8 @@ func Update(wf *aw.Workflow) error {
 		return err
 	}
 
-	wf.Feedback.NewItem("Please accept and install the prompted workflow version").
+	wf.Feedback.
+		NewItem("Please accept and install the prompted workflow version").
 		Icon(aw.IconWorkflow)
 	return nil
 }

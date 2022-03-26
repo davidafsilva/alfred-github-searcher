@@ -28,10 +28,13 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 			Valid(true)
 	}
 
-	warnEmptySubtitle := "Hint: Try to synchronize the repositories with 'ghs'"
+	warnEmptySubtitle := "Hint: "
 	if repoFilter != "" {
 		wf.Filter(repoFilter)
-		warnEmptySubtitle = "Hint: Try a different search pattern or synchronize the repositories with 'ghs'"
+		warnEmptySubtitle += "Try a different search pattern or synchronize " +
+			"the repositories with 'ghs'"
+	} else {
+		warnEmptySubtitle += "Try to synchronize the repositories with 'ghs'"
 	}
 
 	// fallback item when there are no persistence

@@ -16,7 +16,11 @@ var (
 )
 
 func init() {
-	wf = aw.New(awu.GitHub(githubRepository), aw.HelpURL(githubIssues), aw.MaxResults(10))
+	wf = aw.New(
+		awu.GitHub(githubRepository),
+		aw.HelpURL(githubIssues),
+		aw.MaxResults(10),
+	)
 }
 
 func run() {

@@ -3,7 +3,7 @@
 A simple [Alfred workflow](https://www.alfredapp.com/help/workflows/) that
 enables searching through the list of repositories that you've contributed to.
 
-<img alt="preview" src="preview.png"/>
+![Repository Search Preview](preview.png)
 
 ## Installation
 

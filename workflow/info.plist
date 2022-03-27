@@ -232,6 +232,11 @@
 			<integer>250</integer>
 		</dict>
 	</dict>
+	<key>variables</key>
+	<dict>
+		<key>agr_show_owner_image</key>
+		<string>true</string>
+	</dict>
 	<key>version</key>
 	<string>0.1.0</string>
 	<key>webaddress</key>

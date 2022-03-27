@@ -2,7 +2,7 @@ all: build
 
 build:
 	alfred build
-release:
+release: build
 	alfred pack
 clean:
 	alfred clean

@@ -19,7 +19,7 @@ enables searching through the list of repositories that you've contributed to.
    with the `repo` scope enabled
     1. Be sure to authorize the token on your organizations in order to enable
        searching on its private repositories
-4. Add an environment variable named `alfred_github_repos_token` on the workflow
-   settings with the GitHub token as its value
+4. Add an environment variable named `agr_github_token` on the workflow settings
+   with the GitHub token as its value
 5. Synchronize the remote repositories via the `ghs` command (keyword)
 6. Search through the repositories with `gh <repo>`

@@ -66,7 +66,7 @@ func (d *Database) Refresh() ([]persistence.Repository, error) {
 }
 
 func resolveGitHubToken(wf *aw.Workflow) (string, error) {
-	key := "alfred_github_repos_token"
+	key := "agr_github_token"
 
 	// try env
 	token := wf.Config.GetString(key)

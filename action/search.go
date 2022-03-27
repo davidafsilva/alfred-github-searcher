@@ -19,16 +19,21 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 	}
 
 	// add one item per repository
+	showOwnerImages := wf.Config.GetBool("agr_show_images", true)
 	for _, r := range repositories {
-		wf.Feedback.NewItem(r.Name).
+		item := wf.Feedback.NewItem(r.Name).
 			Subtitle(r.Description).
-			Icon(&aw.Icon{
-				Value: r.OwnerImagePath,
-				Type:  aw.IconTypeImage,
-			}).
 			Arg(r.Url).
 			UID(r.Name).
 			Valid(true)
+		if showOwnerImages {
+			item.Icon(&aw.Icon{
+				Value: r.OwnerImagePath,
+				Type:  aw.IconTypeImage,
+			})
+		} else {
+			item.Icon(aw.IconWorkflow)
+		}
 	}
 
 	warnEmptySubtitle := "Hint: "

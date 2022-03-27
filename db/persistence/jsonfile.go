@@ -8,9 +8,10 @@ import (
 )
 
 type Repository struct {
-	Url         string `json:"url"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	Url            string `json:"url"`
+	Name           string `json:"name"`
+	Description    string `json:"description"`
+	OwnerImagePath string `json:"ownerImagePath"`
 }
 
 type JsonFile struct {

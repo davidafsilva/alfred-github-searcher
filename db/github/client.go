@@ -9,9 +9,10 @@ import (
 )
 
 type Repository struct {
-	NameWithOwner string `graphql:"nameWithOwner"`
-	Description   string `graphql:"description"`
-	Url           string `graphql:"url"`
+	NameWithOwner     string `graphql:"nameWithOwner"`
+	Description       string `graphql:"description"`
+	Url               string `graphql:"url"`
+	OpenGraphImageUrl string `graphql:"openGraphImageUrl"`
 }
 type query struct {
 	Viewer struct {

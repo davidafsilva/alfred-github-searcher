@@ -41,13 +41,19 @@ func (d *Database) Refresh() ([]persistence.Repository, error) {
 		return nil, err
 	}
 
-	// map the repositories
+	// map the repositories and download images
 	repos := make([]persistence.Repository, len(ghRepos))
 	for i, ghr := range ghRepos {
+		var ownerImagePath string
+		if len(ghr.OpenGraphImageUrl) > 0 {
+			ownerImagePath = downloadImage(d.wf, ghr.OpenGraphImageUrl)
+		}
+
 		repos[i] = persistence.Repository{
-			Url:         ghr.Url,
-			Name:        ghr.NameWithOwner,
-			Description: ghr.Description,
+			Url:            ghr.Url,
+			Name:           ghr.NameWithOwner,
+			Description:    ghr.Description,
+			OwnerImagePath: ownerImagePath,
 		}
 	}
 

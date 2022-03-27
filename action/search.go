@@ -22,7 +22,10 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 	for _, r := range repositories {
 		wf.Feedback.NewItem(r.Name).
 			Subtitle(r.Description).
-			Icon(aw.IconWorkflow).
+			Icon(&aw.Icon{
+				Value: r.OwnerImagePath,
+				Type:  aw.IconTypeImage,
+			}).
 			Arg(r.Url).
 			UID(r.Name).
 			Valid(true)

@@ -8,12 +8,10 @@ import (
 
 func Update(wf *aw.Workflow) error {
 	// check for newer releases
-	if wf.UpdateCheckDue() {
-		log.Println("checking for newer releases..")
-		if err := wf.CheckForUpdate(); err != nil {
-			log.Printf("error while checking for updates: %s\n", err.Error())
-			return err
-		}
+	log.Println("checking for newer releases..")
+	if err := wf.CheckForUpdate(); err != nil {
+		log.Printf("error while checking for updates: %s\n", err.Error())
+		return err
 	}
 
 	// check if an update is available

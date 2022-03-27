@@ -19,7 +19,7 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 	}
 
 	// add one item per repository
-	showOwnerImages := wf.Config.GetBool("agr_show_images", true)
+	showOwnerImages := wf.Config.GetBool("agr_show_owner_image", true)
 	for _, r := range repositories {
 		item := wf.Feedback.NewItem(r.Name).
 			Subtitle(r.Description).

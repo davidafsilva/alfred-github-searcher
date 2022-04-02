@@ -1,4 +1,4 @@
-package action
+package repository
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 	log.Println(fmt.Sprintf("executing search action with filter: %s", repoFilter))
 
 	// get repositories
-	database := db.NewDatabase(wf)
+	database := db.New(wf)
 	repositories, err := database.GetAllRepositories()
 	if err != nil {
 		return err

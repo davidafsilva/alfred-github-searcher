@@ -10,26 +10,22 @@ import (
 )
 
 type Database struct {
-	wf *aw.Workflow
-	jf *persistence.JsonFile
+	wf               *aw.Workflow
+	repositoriesFile *persistence.JsonFile[persistence.Repository]
 }
 
-func NewDatabase(wf *aw.Workflow) *Database {
+func New(wf *aw.Workflow) *Database {
 	return &Database{
-		wf: wf,
-		jf: persistence.NewJsonFile(wf),
+		wf:               wf,
+		repositoriesFile: persistence.NewRepositoryJsonFile(wf),
 	}
 }
 
 func (d *Database) GetAllRepositories() ([]persistence.Repository, error) {
-	// load data into the database
-	if err := d.jf.Load(); err != nil {
-		return nil, err
-	}
-	return d.jf.Repositories, nil
+	return load(d.repositoriesFile)
 }
 
-func (d *Database) Refresh() ([]persistence.Repository, error) {
+func (d *Database) RefreshRepositories() ([]persistence.Repository, error) {
 	// load the remote data
 	token, err := resolveGitHubToken(d.wf)
 	if err != nil {
@@ -58,11 +54,19 @@ func (d *Database) Refresh() ([]persistence.Repository, error) {
 	}
 
 	// update the JSON file
-	if err = d.jf.Save(repos); err != nil {
+	if err = d.repositoriesFile.Save(repos); err != nil {
 		return nil, err
 	}
 
-	return d.jf.Repositories, nil
+	return d.repositoriesFile.Data, nil
+}
+
+func load[T any](jf *persistence.JsonFile[T]) ([]T, error) {
+	// load data into the database
+	if err := jf.Load(); err != nil {
+		return nil, err
+	}
+	return jf.Data, nil
 }
 
 func resolveGitHubToken(wf *aw.Workflow) (string, error) {

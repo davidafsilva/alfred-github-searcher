@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/davidafsilva/alfred-github-top-repositories/action"
+	"github.com/davidafsilva/alfred-github-top-repositories/action/repository"
 	aw "github.com/deanishe/awgo"
 	awu "github.com/deanishe/awgo/update"
 )
@@ -28,9 +29,9 @@ func run() {
 	var err error = nil
 	switch name {
 	case "search":
-		err = action.Search(wf, wf.Args()[1])
+		err = repository.Search(wf, wf.Args()[1])
 	case "sync":
-		err = action.Sync(wf)
+		err = repository.Sync(wf)
 	case "update":
 		err = action.Update(wf)
 	default:

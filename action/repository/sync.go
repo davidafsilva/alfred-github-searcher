@@ -1,4 +1,4 @@
-package action
+package repository
 
 import (
 	"fmt"
@@ -11,8 +11,8 @@ import (
 func Sync(wf *aw.Workflow) error {
 	log.Println("executing sync action")
 
-	database := db.NewDatabase(wf)
-	repositories, err := database.Refresh()
+	database := db.New(wf)
+	repositories, err := database.RefreshRepositories()
 	if err != nil {
 		return err
 	}

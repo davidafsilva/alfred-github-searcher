@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/shurcooL/githubv4"
 )
@@ -12,7 +13,9 @@ type PullRequest struct {
 	Repository Repository
 	Url        string
 	Title      string
-	Number     string
+	Number     int
+	IsDraft    bool
+	CreatedAt  time.Time
 	Author     struct {
 		LoginUser string `graphql:"login"`
 	}

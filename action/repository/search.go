@@ -9,7 +9,7 @@ import (
 )
 
 func Search(wf *aw.Workflow, repoFilter string) error {
-	log.Println(fmt.Sprintf("executing search action with filter: %s", repoFilter))
+	log.Println(fmt.Sprintf("executing repository search action with filter: %s", repoFilter))
 
 	// get repositories
 	database := db.New(wf)
@@ -39,13 +39,13 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 	warnEmptySubtitle := "Hint: "
 	if repoFilter != "" {
 		wf.Filter(repoFilter)
-		warnEmptySubtitle += "Try a different search pattern or synchronize " +
-			"the repositories with 'ghs'"
+		warnEmptySubtitle += "Try a different search pattern or refresh " +
+			"the repositories with 'ghr'"
 	} else {
-		warnEmptySubtitle += "Try to synchronize the repositories with 'ghs'"
+		warnEmptySubtitle += "Try to refresh the repositories with 'ghr'"
 	}
 
-	// fallback item when there are no persistence
+	// fallback item when there are no repositories
 	if wf.IsEmpty() {
 		wf.Feedback.NewItem("No repositories found").
 			Subtitle(warnEmptySubtitle).

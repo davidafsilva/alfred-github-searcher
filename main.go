@@ -1,20 +1,29 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"os"
+	"strings"
 
 	"github.com/davidafsilva/alfred-github-top-repositories/action"
+	"github.com/davidafsilva/alfred-github-top-repositories/action/pullrequests"
 	"github.com/davidafsilva/alfred-github-top-repositories/action/repository"
 	aw "github.com/deanishe/awgo"
 	awu "github.com/deanishe/awgo/update"
 )
 
-var (
+const (
 	githubRepository = "davidafsilva/alfred-github-repositories"
-	githubIssues     = fmt.Sprintf("%s/issues", githubRepository)
-	wf               *aw.Workflow
+	githubIssues     = "davidafsilva/alfred-github-repositories/issues"
+
+	actionSearch     = "search"
+	actionRefresh    = "refresh"
+	actionUpdate     = "update"
+	targetRepository = "repository"
+	targetPr         = "pr"
 )
+
+var wf *aw.Workflow
 
 func init() {
 	wf = aw.New(
@@ -28,15 +37,14 @@ func run() {
 	name := wf.Args()[0]
 	var err error = nil
 	switch name {
-	case "search":
-		err = repository.Search(wf, wf.Args()[1])
-	case "sync":
-		err = repository.Sync(wf)
-	case "update":
+	case actionSearch:
+		err = search(wf.Args()[1], strings.Join(wf.Args()[2:], ""))
+	case actionRefresh:
+		err = refresh(wf.Args()[1])
+	case actionUpdate:
 		err = action.Update(wf)
 	default:
-		wf.Feedback.NewItem(fmt.Sprintf("Unknown action: %s", name)).
-			Icon(aw.IconError)
+		err = errors.New(fmt.Sprintf("Unknown action: %s", name))
 	}
 
 	if err != nil {
@@ -46,10 +54,32 @@ func run() {
 	wf.SendFeedback()
 }
 
-func main() {
-	if len(wf.Args()) < 1 {
-		os.Exit(1)
+func search(target string, query string) error {
+	var err error = nil
+	switch target {
+	case targetRepository:
+		err = repository.Search(wf, query)
+	case targetPr:
+		err = pullrequests.Search(wf, query)
+	default:
+		err = errors.New(fmt.Sprintf("Unknown action target: %s %s", actionSearch, target))
 	}
+	return err
+}
 
+func refresh(target string) error {
+	var err error = nil
+	switch target {
+	case targetRepository:
+		err = repository.Refresh(wf)
+	case targetPr:
+		err = pullrequests.Refresh(wf)
+	default:
+		err = errors.New(fmt.Sprintf("Unknown action target: %s %s", actionRefresh, target))
+	}
+	return err
+}
+
+func main() {
 	wf.Run(run)
 }

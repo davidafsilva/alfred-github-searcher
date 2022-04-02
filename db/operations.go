@@ -40,7 +40,7 @@ func (d *Database) GetAllCreatedPRs() ([]persistence.PullRequest, error) {
 	return d.loadAndRefreshPrsData(d.createdPrsFile, d.RefreshCreatedPRs)
 }
 
-func (d *Database) GetAllRequestedReviewPRs() ([]persistence.PullRequest, error) {
+func (d *Database) GetAllPRsPendingReview() ([]persistence.PullRequest, error) {
 	return d.loadAndRefreshPrsData(d.requestedReviewPrsFile, d.RefreshRequestedReviewPRs)
 }
 
@@ -155,6 +155,8 @@ func mapPullRequestData(entry github.PullRequest) persistence.PullRequest {
 		Url:            entry.Url,
 		Title:          entry.Title,
 		Number:         entry.Number,
+		IsDraft:        entry.IsDraft,
+		CreationDate:   entry.CreatedAt,
 		Author:         entry.Author.LoginUser,
 	}
 }

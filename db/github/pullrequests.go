@@ -34,11 +34,11 @@ type pullRequestsSearchQuery struct {
 }
 
 func (c *Client) GetReviewRequestedPullRequests() ([]PullRequest, error) {
-	return c.getPullRequests("author:davidafsilva")
+	return c.getPullRequests("author:@me")
 }
 
 func (c *Client) GetCreatedPullRequests() ([]PullRequest, error) {
-	return c.getPullRequests("review-requested:davidafsilva -repo:sky-uk/disco-commons")
+	return c.getPullRequests("review-requested:@me -repo:sky-uk/disco-commons")
 }
 
 func (c *Client) getPullRequests(query string) ([]PullRequest, error) {

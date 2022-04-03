@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/davidafsilva/alfred-github-top-repositories/db"
+	"github.com/davidafsilva/alfred-github-top-repositories/theme"
 	aw "github.com/deanishe/awgo"
 )
 
@@ -22,19 +23,20 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 
 	// add one item per repository
 	showOwnerImages := wf.Config.GetBool(showOwnerImagesKey, true)
+	icons := theme.New(wf).Icons
 	for _, r := range repositories {
 		item := wf.Feedback.NewItem(r.Name).
 			Subtitle(r.Description).
 			Arg(r.Url).
 			UID(r.Name).
 			Valid(true)
-		if showOwnerImages {
+		if !showOwnerImages {
 			item.Icon(&aw.Icon{
 				Value: r.OwnerImagePath,
 				Type:  aw.IconTypeImage,
 			})
 		} else {
-			item.Icon(aw.IconWorkflow)
+			item.Icon(icons.Repository)
 		}
 	}
 

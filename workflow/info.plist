@@ -505,6 +505,8 @@
 		<string>120h</string>
 		<key>ags_show_owner_image</key>
 		<string>true</string>
+		<key>ags_theme</key>
+		<string>light</string>
 	</dict>
 	<key>variablesdontexport</key>
 	<array>

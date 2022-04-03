@@ -7,6 +7,7 @@ import (
 
 	"github.com/davidafsilva/alfred-github-top-repositories/db"
 	"github.com/davidafsilva/alfred-github-top-repositories/db/persistence"
+	"github.com/davidafsilva/alfred-github-top-repositories/theme"
 	aw "github.com/deanishe/awgo"
 )
 
@@ -65,15 +66,16 @@ func doSearch(
 	}
 
 	// add one item per pr
+	icons := theme.New(wf).Icons
 	for _, pr := range allPrs {
 		item := wf.Feedback.NewItem(pr.Title).
 			Subtitle(fmt.Sprintf("#%d opened by %s at %s", pr.Number, pr.Author, pr.RepositoryName)).
 			Arg(pr.Url).
 			Valid(true)
 		if pr.IsDraft {
-			item.Icon(iconPrDraft)
+			item.Icon(icons.DraftPullRequest)
 		} else {
-			item.Icon(iconPrReady)
+			item.Icon(icons.PullRequest)
 		}
 	}
 

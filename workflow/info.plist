@@ -499,6 +499,8 @@
 	<dict>
 		<key>agr_github_token</key>
 		<string></string>
+		<key>agr_prs_refresh_interval</key>
+		<string>30m</string>
 		<key>agr_show_owner_image</key>
 		<string>true</string>
 	</dict>

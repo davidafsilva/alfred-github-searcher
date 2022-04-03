@@ -2,6 +2,7 @@ package db
 
 import (
 	"errors"
+	"log"
 	"time"
 
 	"github.com/davidafsilva/alfred-github-top-repositories/db/github"
@@ -127,7 +128,8 @@ func (d *Database) loadAndRefreshPrsData(
 
 	refreshInterval := d.wf.Config.GetDuration(prsRefreshIntervalKey, defaultPrsRefreshInterval)
 	cacheExpirationDate := file.LastUpdated.Add(refreshInterval)
-	if cacheExpirationDate.After(time.Now().UTC()) {
+	if cacheExpirationDate.Before(time.Now().UTC()) {
+		log.Println("pull-requests are stale, synchronizing..")
 		// data needs to be refreshed
 		return refreshFn()
 	}

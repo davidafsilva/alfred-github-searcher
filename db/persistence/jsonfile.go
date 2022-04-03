@@ -47,7 +47,7 @@ func (jf *JsonFile[T]) Save(data []T) error {
 }
 
 func (jf *JsonFile[T]) loadFromFile() error {
-	if !jf.wf.Data.Exists(jf.dataType) {
+	if !jf.wf.Data.Exists(jf.filename()) {
 		return nil
 	}
 

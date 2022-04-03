@@ -8,8 +8,8 @@ import (
 	aw "github.com/deanishe/awgo"
 )
 
-func Refresh(wf *aw.Workflow) error {
-	log.Println("executing refresh pull requests action..")
+func Sync(wf *aw.Workflow) error {
+	log.Println("executing pull requests synchronization action..")
 
 	database := db.New(wf)
 	prs, err := database.RefreshCreatedPRs()
@@ -24,7 +24,7 @@ func Refresh(wf *aw.Workflow) error {
 	}
 	total += len(prs)
 
-	wf.Feedback.NewItem("Successfully refreshed local database").
+	wf.Feedback.NewItem("Successfully synchronized local database").
 		Subtitle(fmt.Sprintf("%d pull requests found", total)).
 		Icon(aw.IconWorkflow)
 	return nil

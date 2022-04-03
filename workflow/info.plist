@@ -3,16 +3,29 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string>pt.davidafsilva.alfred.github-repositories</string>
+	<string>pt.davidafsilva.alfred.github-searcher</string>
 	<key>category</key>
 	<string>Productivity</string>
 	<key>connections</key>
 	<dict>
+		<key>06AF1DD5-AE1F-47CB-B09C-06CAC9817E72</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A24DB9FB-31E2-4C82-97B4-126D4B2BBB18</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>1B846695-96F9-4113-950F-93F5E3C9372D</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>7B7959F5-99D9-423E-AD67-857FC855D273</string>
+				<string>A24DB9FB-31E2-4C82-97B4-126D4B2BBB18</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -34,15 +47,28 @@
 				<false/>
 			</dict>
 		</array>
+		<key>7310F10E-7B93-4E5F-B5AE-F6DE29337E37</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A24DB9FB-31E2-4C82-97B4-126D4B2BBB18</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 	</dict>
 	<key>createdby</key>
 	<string>David Silva</string>
 	<key>description</key>
-	<string>Get and search through the GitHub repositories you've contributed to</string>
+	<string>Search through your the GitHub repositories and PRs</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>GitHub Repositories</string>
+	<string>GitHub Searcher</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -61,7 +87,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>gh</string>
+				<string>repo</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -97,6 +123,55 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>reposync</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Synchronizing repositories...</string>
+				<key>script</key>
+				<string>./alfred-github-repositories sync repository</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Sync local repositories with the GitHub repositories that you've contributed to</string>
+				<key>title</key>
+				<string>Sync GitHub Repositories</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>D86C302D-9F6C-4E2D-B60E-74BFA33B3149</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>browser</key>
 				<string></string>
 				<key>spaces</key>
@@ -112,55 +187,6 @@
 			<string>A24DB9FB-31E2-4C82-97B4-126D4B2BBB18</string>
 			<key>version</key>
 			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>2</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>keyword</key>
-				<string>ghr</string>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string>Refreshing repositories...</string>
-				<key>script</key>
-				<string>./alfred-github-repositories refresh repository</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>subtext</key>
-				<string>Refresh local repositories with the GitHub repositories that you've contributed to</string>
-				<key>title</key>
-				<string>Refresh GitHub Repositories</string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>D86C302D-9F6C-4E2D-B60E-74BFA33B3149</string>
-			<key>version</key>
-			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -190,7 +216,7 @@
 				<key>runningsubtext</key>
 				<string>Searching for pull requests...</string>
 				<key>script</key>
-				<string>./alfred-github-repositories search pr "$1"</string>
+				<string>./alfred-github-repositories search pr all "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -214,21 +240,100 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>browser</key>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>prc</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Searching for pull requests...</string>
+				<key>script</key>
+				<string>./alfred-github-repositories search pr created "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
 				<string></string>
-				<key>spaces</key>
-				<string></string>
-				<key>url</key>
-				<string>{query}</string>
-				<key>utf8</key>
+				<key>subtext</key>
+				<string>Search GitHub PRs that you've created</string>
+				<key>title</key>
+				<string>Pull Requests</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
 				<true/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.openurl</string>
+			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
-			<string>7B7959F5-99D9-423E-AD67-857FC855D273</string>
+			<string>7310F10E-7B93-4E5F-B5AE-F6DE29337E37</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>prr</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Searching for pull requests...</string>
+				<key>script</key>
+				<string>./alfred-github-repositories search pr pending-review "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Search GitHub PRs that are pending your review</string>
+				<key>title</key>
+				<string>Pull Requests</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>06AF1DD5-AE1F-47CB-B09C-06CAC9817E72</string>
+			<key>version</key>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -246,7 +351,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>prr</string>
+				<string>prsync</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -256,17 +361,17 @@
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string>Refreshing pull requests...</string>
+				<string>Synchronizing pull requests...</string>
 				<key>script</key>
-				<string>./alfred-github-repositories refresh pr</string>
+				<string>./alfred-github-repositories sync pr</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
 				<string></string>
 				<key>subtext</key>
-				<string>Refreshes local pull requests with the GitHub PRs that you've either created or are pending your review</string>
+				<string>Sync local pull requests with the GitHub PRs that you've either created or are pending your review</string>
 				<key>title</key>
-				<string>Refresh GitHub Pull Requests</string>
+				<string>Sync GitHub Pull Requests</string>
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
@@ -333,6 +438,13 @@
 	<string></string>
 	<key>uidata</key>
 	<dict>
+		<key>06AF1DD5-AE1F-47CB-B09C-06CAC9817E72</key>
+		<dict>
+			<key>xpos</key>
+			<integer>145</integer>
+			<key>ypos</key>
+			<integer>490</integer>
+		</dict>
 		<key>1B846695-96F9-4113-950F-93F5E3C9372D</key>
 		<dict>
 			<key>xpos</key>
@@ -347,50 +459,56 @@
 			<key>ypos</key>
 			<integer>15</integer>
 		</dict>
-		<key>7B7959F5-99D9-423E-AD67-857FC855D273</key>
+		<key>7310F10E-7B93-4E5F-B5AE-F6DE29337E37</key>
 		<dict>
 			<key>xpos</key>
-			<integer>345</integer>
+			<integer>145</integer>
 			<key>ypos</key>
-			<integer>280</integer>
+			<integer>385</integer>
 		</dict>
 		<key>A24DB9FB-31E2-4C82-97B4-126D4B2BBB18</key>
 		<dict>
 			<key>xpos</key>
-			<integer>345</integer>
+			<integer>465</integer>
 			<key>ypos</key>
-			<integer>15</integer>
+			<integer>280</integer>
 		</dict>
 		<key>D5122FCE-6BE9-400C-A359-9A72DBFE56F2</key>
 		<dict>
 			<key>xpos</key>
 			<integer>145</integer>
 			<key>ypos</key>
-			<integer>550</integer>
+			<integer>750</integer>
 		</dict>
 		<key>D86C302D-9F6C-4E2D-B60E-74BFA33B3149</key>
 		<dict>
 			<key>xpos</key>
 			<integer>145</integer>
 			<key>ypos</key>
-			<integer>125</integer>
+			<integer>120</integer>
 		</dict>
 		<key>EC7AEA1F-17A0-4F7A-AE36-B1CBA6265B0D</key>
 		<dict>
 			<key>xpos</key>
 			<integer>145</integer>
 			<key>ypos</key>
-			<integer>390</integer>
+			<integer>595</integer>
 		</dict>
 	</dict>
 	<key>variables</key>
 	<dict>
+		<key>agr_github_token</key>
+		<string></string>
 		<key>agr_show_owner_image</key>
 		<string>true</string>
 	</dict>
+	<key>variablesdontexport</key>
+	<array>
+		<string>agr_github_token</string>
+	</array>
 	<key>version</key>
 	<string>0.2.1</string>
 	<key>webaddress</key>
-	<string>https://github.com/davidafsilva/alfred-github-repositories</string>
+	<string>https://github.com/davidafsilva/alfred-github-searcher</string>
 </dict>
 </plist>

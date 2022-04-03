@@ -22,29 +22,52 @@ var (
 )
 
 func Search(wf *aw.Workflow, prFilter string) error {
+	return doSearch(wf, prFilter, func(database *db.Database) ([]persistence.PullRequest, error) {
+		createdPrs, err := database.GetAllCreatedPRs()
+		if err != nil {
+			return nil, err
+		}
+
+		pendingReviewPrs, err := database.GetAllPRsPendingReview()
+		if err != nil {
+			return nil, err
+		}
+
+		return mergePullRequests(createdPrs, pendingReviewPrs), nil
+	})
+}
+
+func SearchCreated(wf *aw.Workflow, prFilter string) error {
+	return doSearch(wf, prFilter, func(database *db.Database) ([]persistence.PullRequest, error) {
+		return database.GetAllCreatedPRs()
+	})
+}
+
+func SearchPendingReview(wf *aw.Workflow, prFilter string) error {
+	return doSearch(wf, prFilter, func(database *db.Database) ([]persistence.PullRequest, error) {
+		return database.GetAllPRsPendingReview()
+	})
+}
+
+func doSearch(
+	wf *aw.Workflow,
+	prFilter string,
+	prsLoader func(database *db.Database) ([]persistence.PullRequest, error),
+) error {
 	log.Println(fmt.Sprintf("executing pr search action with filter: %s", prFilter))
 
 	database := db.New(wf)
 
 	// get created pull requests
-	createdPrs, err := database.GetAllCreatedPRs()
+	allPrs, err := prsLoader(database)
 	if err != nil {
 		return err
 	}
-
-	// get pull requests pending review
-	pendingReviewPrs, err := database.GetAllPRsPendingReview()
-	if err != nil {
-		return err
-	}
-
-	// merge Prs
-	allPrs := mergePullRequests(createdPrs, pendingReviewPrs)
 
 	// add one item per pr
 	for _, pr := range allPrs {
 		item := wf.Feedback.NewItem(pr.Title).
-			Subtitle(fmt.Sprintf("#%d opened by %s at %s", pr.Number, pr.Author, pr.Author)).
+			Subtitle(fmt.Sprintf("#%d opened by %s at %s", pr.Number, pr.Author, pr.RepositoryName)).
 			Arg(pr.Url).
 			Valid(true)
 		if pr.IsDraft {
@@ -58,9 +81,9 @@ func Search(wf *aw.Workflow, prFilter string) error {
 	if prFilter != "" {
 		wf.Filter(prFilter)
 		warnEmptySubtitle += "Try a different search pattern or refresh " +
-			"the pull requests with 'ghr'"
+			"the pull requests with 'prsync'"
 	} else {
-		warnEmptySubtitle += "Try to refresh the pull requests with 'ghr'"
+		warnEmptySubtitle += "Try to refresh the pull requests with 'prsync'"
 	}
 
 	// fallback item when there are no pull requests
@@ -77,11 +100,11 @@ func mergePullRequests(created, toReview []persistence.PullRequest) []persistenc
 	// merge them
 	allPrs := make([]persistence.PullRequest, len(created)+len(toReview))
 	copy(allPrs, created)
-	copy(allPrs[len(created)-1:], toReview)
+	copy(allPrs[len(created):], toReview)
 
 	// sort by creation date
 	sort.Slice(allPrs, func(i, j int) bool {
-		return allPrs[i].CreationDate.Before(allPrs[j].CreationDate)
+		return allPrs[i].CreationDate.After(allPrs[j].CreationDate)
 	})
 
 	return allPrs

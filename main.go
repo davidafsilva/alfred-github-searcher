@@ -16,11 +16,14 @@ const (
 	githubRepository = "davidafsilva/alfred-github-repositories"
 	githubIssues     = "davidafsilva/alfred-github-repositories/issues"
 
-	actionSearch     = "search"
-	actionRefresh    = "refresh"
-	actionUpdate     = "update"
-	targetRepository = "repository"
-	targetPr         = "pr"
+	actionSearch = "search"
+	actionSync   = "sync"
+	actionUpdate = "update"
+
+	targetRepository          = "repository"
+	targetPr                  = "pr"
+	targetPrTypeCreated       = "created"
+	targetPrTypePendingReview = "pending-review"
 )
 
 var wf *aw.Workflow
@@ -38,9 +41,9 @@ func run() {
 	var err error = nil
 	switch name {
 	case actionSearch:
-		err = search(wf.Args()[1], strings.Join(wf.Args()[2:], ""))
-	case actionRefresh:
-		err = refresh(wf.Args()[1])
+		err = search(wf.Args()[1], wf.Args()[2:])
+	case actionSync:
+		err = sync(wf.Args()[1])
 	case actionUpdate:
 		err = action.Update(wf)
 	default:
@@ -54,28 +57,37 @@ func run() {
 	wf.SendFeedback()
 }
 
-func search(target string, query string) error {
+func search(target string, args []string) error {
 	var err error = nil
 	switch target {
 	case targetRepository:
-		err = repository.Search(wf, query)
+		err = repository.Search(wf, strings.Join(args, ""))
 	case targetPr:
-		err = pullrequests.Search(wf, query)
+		t := args[0]
+		q := strings.Join(args[1:], "")
+		switch t {
+		case targetPrTypeCreated:
+			err = pullrequests.SearchCreated(wf, q)
+		case targetPrTypePendingReview:
+			err = pullrequests.SearchPendingReview(wf, q)
+		default:
+			err = pullrequests.Search(wf, q)
+		}
 	default:
 		err = errors.New(fmt.Sprintf("Unknown action target: %s %s", actionSearch, target))
 	}
 	return err
 }
 
-func refresh(target string) error {
+func sync(target string) error {
 	var err error = nil
 	switch target {
 	case targetRepository:
-		err = repository.Refresh(wf)
+		err = repository.Sync(wf)
 	case targetPr:
-		err = pullrequests.Refresh(wf)
+		err = pullrequests.Sync(wf)
 	default:
-		err = errors.New(fmt.Sprintf("Unknown action target: %s %s", actionRefresh, target))
+		err = errors.New(fmt.Sprintf("Unknown action target: %s %s", actionSync, target))
 	}
 	return err
 }

@@ -8,8 +8,8 @@ import (
 	aw "github.com/deanishe/awgo"
 )
 
-func Refresh(wf *aw.Workflow) error {
-	log.Println("executing refresh repositories action..")
+func Sync(wf *aw.Workflow) error {
+	log.Println("executing repositories synchronization action..")
 
 	database := db.New(wf)
 	repositories, err := database.RefreshRepositories()
@@ -17,7 +17,7 @@ func Refresh(wf *aw.Workflow) error {
 		return err
 	}
 
-	wf.Feedback.NewItem("Successfully refreshed local database").
+	wf.Feedback.NewItem("Successfully synchronized local database").
 		Subtitle(fmt.Sprintf("%d repositories found", len(repositories))).
 		Icon(aw.IconWorkflow)
 	return nil

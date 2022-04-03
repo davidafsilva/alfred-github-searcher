@@ -39,10 +39,10 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 	warnEmptySubtitle := "Hint: "
 	if repoFilter != "" {
 		wf.Filter(repoFilter)
-		warnEmptySubtitle += "Try a different search pattern or refresh " +
-			"the repositories with 'ghr'"
+		warnEmptySubtitle += "Try a different search pattern or sync " +
+			"the repositories with 'reposync'"
 	} else {
-		warnEmptySubtitle += "Try to refresh the repositories with 'ghr'"
+		warnEmptySubtitle += "Try to sync the repositories with 'reposync'"
 	}
 
 	// fallback item when there are no repositories

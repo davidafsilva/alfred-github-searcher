@@ -128,6 +128,7 @@ func (d *Database) loadAndRefreshPrsData(
 
 	refreshInterval := d.wf.Config.GetDuration(prsRefreshIntervalKey, defaultPrsRefreshInterval)
 	cacheExpirationDate := file.LastUpdated.Add(refreshInterval)
+	log.Printf("local PRs will expire at %v (%v TTL)\n", cacheExpirationDate, refreshInterval)
 	if cacheExpirationDate.Before(time.Now().UTC()) {
 		log.Println("pull-requests are stale, synchronizing..")
 		// data needs to be refreshed

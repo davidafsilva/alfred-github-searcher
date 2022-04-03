@@ -497,16 +497,18 @@
 	</dict>
 	<key>variables</key>
 	<dict>
-		<key>agr_github_token</key>
+		<key>ags_github_token</key>
 		<string></string>
-		<key>agr_prs_refresh_interval</key>
+		<key>ags_prs_refresh_interval</key>
 		<string>30m</string>
-		<key>agr_show_owner_image</key>
+		<key>ags_repositories_refresh_interval</key>
+		<string>120h</string>
+		<key>ags_show_owner_image</key>
 		<string>true</string>
 	</dict>
 	<key>variablesdontexport</key>
 	<array>
-		<string>agr_github_token</string>
+		<string>ags_github_token</string>
 	</array>
 	<key>version</key>
 	<string>0.2.1</string>

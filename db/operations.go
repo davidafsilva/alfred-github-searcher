@@ -12,9 +12,11 @@ import (
 )
 
 const (
-	githubTokenKey            = "agr_github_token"
-	prsRefreshIntervalKey     = "agr_prs_refresh_interval"
-	defaultPrsRefreshInterval = 30 * time.Minute
+	githubTokenKey                     = "ags_github_token"
+	prsRefreshIntervalKey              = "ags_prs_refresh_interval"
+	defaultPrsRefreshInterval          = 30 * time.Minute
+	repositoriesRefreshIntervalKey     = "ags_repositories_refresh_interval"
+	defaultRepositoriesRefreshInterval = 24 * 5 * time.Hour
 )
 
 type Database struct {
@@ -34,15 +36,33 @@ func New(wf *aw.Workflow) *Database {
 }
 
 func (d *Database) GetAllRepositories() ([]persistence.Repository, error) {
-	return load(d.repositoriesFile)
+	return loadAndRefreshData(
+		d.wf,
+		d.repositoriesFile,
+		repositoriesRefreshIntervalKey,
+		defaultRepositoriesRefreshInterval,
+		d.RefreshRepositories,
+	)
 }
 
 func (d *Database) GetAllCreatedPRs() ([]persistence.PullRequest, error) {
-	return d.loadAndRefreshPrsData(d.createdPrsFile, d.RefreshCreatedPRs)
+	return loadAndRefreshData(
+		d.wf,
+		d.createdPrsFile,
+		prsRefreshIntervalKey,
+		defaultPrsRefreshInterval,
+		d.RefreshCreatedPRs,
+	)
 }
 
 func (d *Database) GetAllPRsPendingReview() ([]persistence.PullRequest, error) {
-	return d.loadAndRefreshPrsData(d.requestedReviewPrsFile, d.RefreshRequestedReviewPRs)
+	return loadAndRefreshData(
+		d.wf,
+		d.requestedReviewPrsFile,
+		prsRefreshIntervalKey,
+		defaultPrsRefreshInterval,
+		d.RefreshRequestedReviewPRs,
+	)
 }
 
 func (d *Database) RefreshRepositories() ([]persistence.Repository, error) {
@@ -78,12 +98,28 @@ func (d *Database) RefreshCreatedPRs() ([]persistence.PullRequest, error) {
 	)
 }
 
-func load[T any](jf *persistence.JsonFile[T]) ([]T, error) {
+func loadAndRefreshData[T any](
+	wf *aw.Workflow,
+	file *persistence.JsonFile[T],
+	refreshConfigKey string,
+	defaultRefreshInterval time.Duration,
+	refreshFn func() ([]T, error),
+) ([]T, error) {
 	// load data into the database
-	if err := jf.Load(); err != nil {
+	if err := file.Load(); err != nil {
 		return nil, err
 	}
-	return jf.Data, nil
+
+	refreshInterval := wf.Config.GetDuration(refreshConfigKey, defaultRefreshInterval)
+	cacheExpirationDate := file.LastUpdated.Add(refreshInterval)
+	log.Printf("local data will expire at %v (%v TTL)\n", cacheExpirationDate, refreshInterval)
+	if cacheExpirationDate.Before(time.Now().UTC()) {
+		log.Println("data is stale, synchronizing..")
+		// data needs to be refreshed
+		return refreshFn()
+	}
+
+	return file.Data, nil
 }
 
 func refresh[I any, O any](
@@ -115,27 +151,6 @@ func refresh[I any, O any](
 	}
 
 	return file.Data, nil
-}
-
-func (d *Database) loadAndRefreshPrsData(
-	file *persistence.JsonFile[persistence.PullRequest],
-	refreshFn func() ([]persistence.PullRequest, error),
-) ([]persistence.PullRequest, error) {
-	data, err := load(file)
-	if err != nil {
-		return nil, err
-	}
-
-	refreshInterval := d.wf.Config.GetDuration(prsRefreshIntervalKey, defaultPrsRefreshInterval)
-	cacheExpirationDate := file.LastUpdated.Add(refreshInterval)
-	log.Printf("local PRs will expire at %v (%v TTL)\n", cacheExpirationDate, refreshInterval)
-	if cacheExpirationDate.Before(time.Now().UTC()) {
-		log.Println("pull-requests are stale, synchronizing..")
-		// data needs to be refreshed
-		return refreshFn()
-	}
-
-	return data, nil
 }
 
 func (d *Database) mapRepositoryData(entry github.Repository) persistence.Repository {

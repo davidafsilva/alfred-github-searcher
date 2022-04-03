@@ -8,6 +8,8 @@ import (
 	aw "github.com/deanishe/awgo"
 )
 
+const showOwnerImagesKey = "ags_show_owner_image"
+
 func Search(wf *aw.Workflow, repoFilter string) error {
 	log.Println(fmt.Sprintf("executing repository search action with filter: %s", repoFilter))
 
@@ -19,7 +21,7 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 	}
 
 	// add one item per repository
-	showOwnerImages := wf.Config.GetBool("agr_show_owner_image", true)
+	showOwnerImages := wf.Config.GetBool(showOwnerImagesKey, true)
 	for _, r := range repositories {
 		item := wf.Feedback.NewItem(r.Name).
 			Subtitle(r.Description).

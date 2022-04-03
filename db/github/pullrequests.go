@@ -27,8 +27,8 @@ type pullRequestsSearchQuery struct {
 			HasNextPage bool
 			EndCursor   githubv4.String
 		}
-		Results struct {
-			PullRequests []PullRequest `graphql:"... on PullRequest"`
+		PullRequests []struct {
+			PullRequest `graphql:"... on PullRequest"`
 		} `graphql:"nodes"`
 	} `graphql:"search(type: ISSUE, first: 100, after: $pageCursor, query: $searchQuery)"`
 }
@@ -46,9 +46,10 @@ func (c *Client) getPullRequests(query string) ([]PullRequest, error) {
 	var pageCursor *githubv4.String
 	pageNumber := 1
 	for {
+		sq := fmt.Sprintf("is:open is:pr archived:false %s", query)
 		variables := map[string]interface{}{
-			"pageCursor": pageCursor,
-			"query":      fmt.Sprintf("is:open is:pr archived:false %s", query),
+			"pageCursor":  pageCursor,
+			"searchQuery": githubv4.String(sq),
 		}
 		var q pullRequestsSearchQuery
 		log.Printf("requesting pull requests from GitHub (page %d)..\n", pageNumber)
@@ -58,7 +59,9 @@ func (c *Client) getPullRequests(query string) ([]PullRequest, error) {
 			return nil, err
 		}
 
-		pullRequests = append(pullRequests, q.Search.Results.PullRequests...)
+		for _, pr := range q.Search.PullRequests {
+			pullRequests = append(pullRequests, pr.PullRequest)
+		}
 		if !q.Search.PageInfo.HasNextPage {
 			break
 		}

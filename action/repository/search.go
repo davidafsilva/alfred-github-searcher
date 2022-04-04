@@ -30,7 +30,7 @@ func Search(wf *aw.Workflow, repoFilter string) error {
 			Arg(r.Url).
 			UID(r.Name).
 			Valid(true)
-		if !showOwnerImages {
+		if showOwnerImages {
 			item.Icon(&aw.Icon{
 				Value: r.OwnerImagePath,
 				Type:  aw.IconTypeImage,

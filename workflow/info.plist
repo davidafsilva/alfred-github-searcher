@@ -99,7 +99,7 @@
 				<key>runningsubtext</key>
 				<string>Searching for repositories...</string>
 				<key>script</key>
-				<string>./alfred-github-repositories search repository "$1"</string>
+				<string>./alfred-github-searcher search repository "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -148,7 +148,7 @@
 				<key>runningsubtext</key>
 				<string>Synchronizing repositories...</string>
 				<key>script</key>
-				<string>./alfred-github-repositories sync repository</string>
+				<string>./alfred-github-searcher sync repository</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -216,7 +216,7 @@
 				<key>runningsubtext</key>
 				<string>Searching for pull requests...</string>
 				<key>script</key>
-				<string>./alfred-github-repositories search pr all "$1"</string>
+				<string>./alfred-github-searcher search pr all "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -265,7 +265,7 @@
 				<key>runningsubtext</key>
 				<string>Searching for pull requests...</string>
 				<key>script</key>
-				<string>./alfred-github-repositories search pr created "$1"</string>
+				<string>./alfred-github-searcher search pr created "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -314,7 +314,7 @@
 				<key>runningsubtext</key>
 				<string>Searching for pull requests...</string>
 				<key>script</key>
-				<string>./alfred-github-repositories search pr pending-review "$1"</string>
+				<string>./alfred-github-searcher search pr pending-review "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -363,7 +363,7 @@
 				<key>runningsubtext</key>
 				<string>Synchronizing pull requests...</string>
 				<key>script</key>
-				<string>./alfred-github-repositories sync pr</string>
+				<string>./alfred-github-searcher sync pr</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -412,7 +412,7 @@
 				<key>runningsubtext</key>
 				<string>Checking for updates...</string>
 				<key>script</key>
-				<string>./alfred-github-repositories update</string>
+				<string>./alfred-github-searcher update</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>

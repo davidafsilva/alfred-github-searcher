@@ -64,7 +64,7 @@
 	<key>createdby</key>
 	<string>David Silva</string>
 	<key>description</key>
-	<string>Search through your the GitHub repositories and PRs</string>
+	<string>Search through your GitHub repositories and PRs</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>

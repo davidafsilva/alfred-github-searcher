@@ -31,6 +31,7 @@ well as pull requests created or pending your review.
 | `prr`      | `[filter]` | Searches for PRs that are pending your review   |
 | `pr`       | `[filter]` | Both of the above                               |
 | `prsync`   |            | Forces the pull request synchronization         |
+| `ghu`      |            | Checks for and prompts for an workflow update   |
 
 ## Configuration
 

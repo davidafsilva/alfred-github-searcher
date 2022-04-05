@@ -24,6 +24,7 @@ type Database struct {
 	repositoriesFile       *persistence.JsonFile[persistence.Repository]
 	createdPrsFile         *persistence.JsonFile[persistence.PullRequest]
 	requestedReviewPrsFile *persistence.JsonFile[persistence.PullRequest]
+	scheduler              *workflowScheduler
 }
 
 func New(wf *aw.Workflow) *Database {
@@ -32,36 +33,37 @@ func New(wf *aw.Workflow) *Database {
 		repositoriesFile:       persistence.NewRepositoryJsonFile(wf),
 		createdPrsFile:         persistence.NewCreatedPullRequestsJsonFile(wf),
 		requestedReviewPrsFile: persistence.NewReviewRequestedPullRequestsJsonFile(wf),
+		scheduler:              &workflowScheduler{wf},
 	}
 }
 
 func (d *Database) GetAllRepositories() ([]persistence.Repository, error) {
-	return loadAndRefreshData(
+	return loadAndScheduleRefreshData(
 		d.wf,
 		d.repositoriesFile,
 		repositoriesRefreshIntervalKey,
 		defaultRepositoriesRefreshInterval,
-		d.RefreshRepositories,
+		d.scheduler.scheduleRepositoriesRefresh,
 	)
 }
 
 func (d *Database) GetAllCreatedPRs() ([]persistence.PullRequest, error) {
-	return loadAndRefreshData(
+	return loadAndScheduleRefreshData(
 		d.wf,
 		d.createdPrsFile,
 		prsRefreshIntervalKey,
 		defaultPrsRefreshInterval,
-		d.RefreshCreatedPRs,
+		d.scheduler.schedulePullRequestsRefresh,
 	)
 }
 
 func (d *Database) GetAllPRsPendingReview() ([]persistence.PullRequest, error) {
-	return loadAndRefreshData(
+	return loadAndScheduleRefreshData(
 		d.wf,
 		d.requestedReviewPrsFile,
 		prsRefreshIntervalKey,
 		defaultPrsRefreshInterval,
-		d.RefreshRequestedReviewPRs,
+		d.scheduler.schedulePullRequestsRefresh,
 	)
 }
 
@@ -98,12 +100,12 @@ func (d *Database) RefreshCreatedPRs() ([]persistence.PullRequest, error) {
 	)
 }
 
-func loadAndRefreshData[T any](
+func loadAndScheduleRefreshData[T any](
 	wf *aw.Workflow,
 	file *persistence.JsonFile[T],
 	refreshConfigKey string,
 	defaultRefreshInterval time.Duration,
-	refreshFn func() ([]T, error),
+	refreshSchedulerFn func() error,
 ) ([]T, error) {
 	// load data into the database
 	if err := file.Load(); err != nil {
@@ -116,7 +118,7 @@ func loadAndRefreshData[T any](
 	if cacheExpirationDate.Before(time.Now().UTC()) {
 		log.Println("data is stale, synchronizing..")
 		// data needs to be refreshed
-		return refreshFn()
+		_ = refreshSchedulerFn()
 	}
 
 	return file.Data, nil

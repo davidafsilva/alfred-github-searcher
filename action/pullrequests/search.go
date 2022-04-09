@@ -11,17 +11,6 @@ import (
 	aw "github.com/deanishe/awgo"
 )
 
-var (
-	iconPrDraft = &aw.Icon{
-		Value: "pr-draft.png",
-		Type:  aw.IconTypeImage,
-	}
-	iconPrReady = &aw.Icon{
-		Value: "pr-ready.png",
-		Type:  aw.IconTypeImage,
-	}
-)
-
 func Search(wf *aw.Workflow, prFilter string) error {
 	return doSearch(wf, prFilter, func(database *db.Database) ([]persistence.PullRequest, error) {
 		createdPrs, err := database.GetAllCreatedPRs()

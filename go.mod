@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/deanishe/awgo v0.29.1
+	github.com/dustin/go-humanize v1.0.0
 	github.com/shurcooL/githubv4 v0.0.0-20220115235240-a14260e6f8a2
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
 )

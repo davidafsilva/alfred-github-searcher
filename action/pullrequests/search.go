@@ -9,6 +9,7 @@ import (
 	"github.com/davidafsilva/alfred-github-top-repositories/db/persistence"
 	"github.com/davidafsilva/alfred-github-top-repositories/theme"
 	aw "github.com/deanishe/awgo"
+	"github.com/dustin/go-humanize"
 )
 
 func Search(wf *aw.Workflow, prFilter string) error {
@@ -57,8 +58,15 @@ func doSearch(
 	// add one item per pr
 	icons := theme.New(wf).Icons
 	for _, pr := range allPrs {
+		subtitle := fmt.Sprintf(
+			"#%d opened %s by %s at %s",
+			pr.Number,
+			humanize.Time(pr.CreationDate),
+			pr.Author,
+			pr.RepositoryName,
+		)
 		item := wf.Feedback.NewItem(pr.Title).
-			Subtitle(fmt.Sprintf("#%d opened by %s at %s", pr.Number, pr.Author, pr.RepositoryName)).
+			Subtitle(subtitle).
 			Arg(pr.Url).
 			Valid(true)
 		if pr.IsDraft {
